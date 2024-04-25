@@ -22,7 +22,7 @@ const HomePage = () => {
                     {!image && ( // Só exibe o botão se não houver imagem carregada
                         <>
                             <label htmlFor="file-upload" className={styles.customFileUpload}>
-                                Upload Image
+                                UPLOAD IMAGE
                             </label>
                             <input id="file-upload" type="file" onChange={handleImageChange} accept="image/*" className={styles.fileInput} />
                         </>
