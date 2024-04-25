@@ -1,0 +1,51 @@
+.main {
+  font-family: 'LoLFont', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50rem;
+  /* background-color: with gradient(#091428, #0A1428); */
+  background-image: linear-gradient(180deg, #091428 0%, #0A1428 100%);  
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 4rem;
+  color: #C89B3C;
+}
+
+.center {
+  text-align: center;
+}
+
+.customFileUpload {
+  display: inline-block;
+  padding: 2rem 2rem;
+  cursor: pointer;
+  background-color: #785A28;
+  color: white;
+  border-radius: 1rem;
+  margin-top: 1rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadedImage {
+  width: 60%; /* ajuste conforme necessário */
+  border-radius: 2rem;
+}
+
+@font-face {
+  font-family: 'LoLFont';
+  src: url('/fonts/BeaufortForLoL-OTF/BeaufortforLOL-Bold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
