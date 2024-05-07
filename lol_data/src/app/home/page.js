@@ -19,12 +19,15 @@ const HomePage = () => {
             <h1 className={styles.title}>LEAGUE OF LEGENDS DATA</h1>
             <div className={styles.center}>
                 <div>
-                    {!image && ( // Só exibe o botão se não houver imagem carregada
+                    {!image && (
                         <>
                             <label htmlFor="file-upload" className={styles.customFileUpload}>
                                 UPLOAD IMAGE
                             </label>
+                            {/* input de texto para o usuario escrever uma url */}
                             <input id="file-upload" type="file" onChange={handleImageChange} accept="image/*" className={styles.fileInput} />
+                            <input type="text" placeholder="URL" className={styles.urlInput} />
+
                         </>
                     )}
                     {image && <img src={image} alt="Uploaded" className={styles.uploadedImage} />}
