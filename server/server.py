@@ -1,28 +1,70 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from PIL import Image
+from io import BytesIO
+from pytube import YouTube
+import cv2
+import os
+
 
 app = Flask(__name__)
 CORS(app)
 
-    # const handleImageChange = (event) => {
-    #     const file = event.target.files[0];
-    #     if (file && file.type.substr(0, 5) === "image") {
-    #         setImage(URL.createObjectURL(file));
-    #         fetch ('http://localhost:8080/api', {
-    #             method: 'POST',
-    #             body: file
-    #         })
-    #     } else {
-    #         setImage(null);
-    #     }
-    # };
-@app.route('/api', methods=['GET'])
-# def api que recebe o body e retorna true se for uma imagem:
+def capture_frames(video_path, output_folder, interval_seconds):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        return jsonify({'error': 'Error opening video'})
+
+    #take screenshots every interval_seconds of the video and save it in a folder /frames
+    frame_count = 0
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        if frame_count % (interval_seconds * 30) == 0:
+            cv2.imwrite(f'{output_folder}/frame_{frame_count}.jpg', frame)
+            print (f'Frame {frame_count} captured')
+            print (f'Frame capture in {output_folder}/frame_{frame_count}.jpg')
+        frame_count += 1
+
+    cap.release()
+    return jsonify({'message': 'Frames captured successfully'})
+
+
+
+@app.route('/api', methods=['POST'])
 def api():
-    file = request.files['file']
-    if file and file.mimetype.startswith('image'):
-        return jsonify({'valid': True})
-    return jsonify({'valid': False})
+    data = request.json
+    print (data)
+    youtubeURL = data['imageUrl']
+    if not youtubeURL:
+        return jsonify({'error': 'YouTube URL is required'}), 400
+
+    try:
+        video = YouTube(youtubeURL)
+        video_stream = video.streams.filter(file_extension='mp4', progressive=True).order_by('resolution').desc().first()
+        video_stream.download(output_path='videos', filename='video.mp4')    
+        return jsonify({'message': 'Video downloaded successfully'})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/code', methods=['GET'])
+def code():
+    # do the code of capturing frames with the video path, output folder and interval seconds
+    video_path = 'videos/video.mp4'
+    output_folder = 'frames'
+    interval_seconds = 50
+    return capture_frames(video_path, output_folder, interval_seconds)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
