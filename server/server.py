@@ -5,6 +5,7 @@ from io import BytesIO
 from pytube import YouTube
 import cv2
 import os
+import funcs as f
 
 
 app = Flask(__name__)
@@ -36,6 +37,14 @@ def capture_frames(video_path, output_folder, interval_seconds):
     return jsonify({'message': 'Frames captured successfully'})
 
 
+def getDataFromFrames():
+    # do the code to get the data from the frames
+    # convert a df to a csv file
+
+    return jsonify({'message': 'Data extracted successfully'})
+    
+
+
 
 @app.route('/api', methods=['POST'])
 def api():
@@ -62,6 +71,16 @@ def code():
     output_folder = 'frames'
     interval_seconds = 50
     return capture_frames(video_path, output_folder, interval_seconds)
+
+
+
+@app.route('/csv', methods=['GET'])
+def csv():
+    # do the function getDataFromFrames() to get the data from the frames
+    return getDataFromFrames()
+
+
+
 
 
 

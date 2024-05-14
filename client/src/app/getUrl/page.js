@@ -50,6 +50,26 @@ const HomePage = () => {
         }
     };
 
+    const tryCSV = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/csv', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await response.json();
+            console.log(result);
+            alert('CSV generated successfully');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('CSV generation failed');
+        }
+    }
+    
+
+
+
     return (
         <main className={styles.main}>
             <h1 className={styles.title}>LEAGUE OF LEGENDS DATA</h1>
@@ -65,6 +85,8 @@ const HomePage = () => {
                     />
                     <button onClick={uploadImage} className={styles.uploadButton}>GET URL</button>
                     <button onClick={tryCode} className={styles.uploadButton}>TRY THE CODE</button>
+                    <button onClick={tryCSV} className={styles.uploadButton}>TRY THE CSV</button>
+
 
                 </div>
             </div>
