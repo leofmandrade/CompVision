@@ -37,10 +37,43 @@ def capture_frames(video_path, output_folder, interval_seconds):
     return jsonify({'message': 'Frames captured successfully'})
 
 
+
+# def getDataFromFrames():
+#     folder = 'frames'
+#     pathicons = 'championIcons'
+    
+#     i = 0
+#     while True:
+#         filename = f"frame_{i}.jpg"
+#         full_path = os.path.join(folder, filename)
+        
+#         if os.path.isfile(full_path):
+#             df, df2 = f.run(full_path, pathicons)
+#             print(df)
+#             i += 1500  # Incrementa o índice para o próximo arquivo
+#         else:
+#             break  # Interrompe o loop se o arquivo não existir
+
+#     return jsonify({'message': 'Data extracted successfully'})
+
+
 def getDataFromFrames():
     # do the code to get the data from the frames
     # convert a df to a csv file
-
+    # return the csv file
+    print ('pegadno dados dos frames')
+    
+  
+    folder = 'frames'
+    filenames = os.listdir(folder)
+    
+    pathicons = 'championIcons'
+    print (filenames)
+    for filename in filenames:
+        filename = os.path.join(folder, filename)
+        df, df2 = f.run(filename, pathicons)
+        print (df)
+        
     return jsonify({'message': 'Data extracted successfully'})
     
 
@@ -77,6 +110,7 @@ def code():
 @app.route('/csv', methods=['GET'])
 def csv():
     # do the function getDataFromFrames() to get the data from the frames
+    print ('Getting data from frames')
     return getDataFromFrames()
 
 

@@ -5,10 +5,11 @@ import easyocr
 import pandas as pd
 
 # Specify paths
-screenshot_path = 'img5.jpg'
+screenshot_path = 'server/frames/frame_10500.jpg'
 
 
 icons = "championIcons"
 
-f.run(screenshot_path, icons)
+df, df2 = f.run(screenshot_path, icons)
+print (df)
 

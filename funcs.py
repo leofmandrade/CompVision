@@ -18,7 +18,7 @@ def open_resize(path):
         # Resize the image to match the screen resolution
         image = cv2.resize(image, (1300, 700))
     else:
-        print("Error: Unable to load image")
+        print("Error: Unable to load image" + path)
     return image
 
 def get_champion_images(image):
@@ -424,8 +424,8 @@ def run(screenshot_path, icon_folder):
     reader = easyocr.Reader(['en'])
     df = get_top_bar(image, reader)
     df2 = get_hud_info(hud_images, reader, list)
-    print(df2)
-    print(df)
+    
+    return df, df2
 
 
 
