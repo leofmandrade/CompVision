@@ -330,6 +330,104 @@ def get_top_bar(image,reader):
     return tabela
 
 
+def get_hud_info(hudimages,reader, championslist):
+    lista1 = hudimages[:5]
+    lista2 = hudimages[5:]
+    listakda = []
+    listafarm =[]
+
+    xKDA, yKDA = 135, 10
+    widthKDA, heightKDA = 50, 12
+
+    xKDA2, yKDA2 = 60, 10
+    widthKDA2, heightKDA2 = 50, 13
+
+    xfarm, yfarm = 180, 10
+    widthFarm, heightFarm = 34, 13
+
+    xfarm2, yfarm2 = 25, 10
+    widthFarm2, heightFarm2 = 34, 13
+
+    for image in lista1:
+        
+        kda = image[yKDA:yKDA+heightKDA, xKDA:xKDA+widthKDA]
+        kda = image_processing(kda)
+        kda = extract_text(kda,reader)
+        kda = limpaerrosgold(kda)
+        kda = apaganaonumero(kda)
+        if len(kda)==5:
+            kda = kda[0] + '/' + kda[2] + '/' + kda[4]
+        listakda.append(kda)
+
+        farm = image[yfarm:yfarm+heightFarm, xfarm:xfarm+widthFarm]
+        farm = image_processing(farm)
+        farm = extract_text(farm,reader)
+        farm = limpaerrosgold(farm)
+        farm = apaganaonumero(farm)
+        listafarm.append(farm)
+    
+    for image in lista2:
+        kda = image[yKDA2:yKDA2+heightKDA2, xKDA2:xKDA2+widthKDA2]
+        kda = image_processing(kda)
+        kda = extract_text(kda,reader)
+        if len(kda)==5:
+            kda = kda[0] + '/' + kda[2] + '/' + kda[4]
+        listakda.append(kda)
+
+        farm = image[yfarm2:yfarm2+heightFarm2, xfarm2:xfarm2+widthFarm2]
+        farm = image_processing(farm)
+        farm = extract_text(farm,reader)
+        listafarm.append(farm)
+
+    tabelaplayer = pd.DataFrame()
+    tabelaplayer["PLAYER"] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    tabelaplayer["TEAM"] = ["BLUE", "BLUE", "BLUE", "BLUE", "BLUE","RED", "RED", "RED", "RED", "RED"]
+    kills = []
+    deaths = []
+    assists = []
+    farm = []
+    for kda in listakda:
+        kda = kda.split('/')
+        if len(kda)==3:
+            kills.append(kda[0])
+            deaths.append(kda[1])
+            assists.append(kda[2])
+        else:
+            kills.append('erro')
+            deaths.append('erro')
+            assists.append('erro')
+    
+    for farm_text in listafarm:
+        farm_text = farm_text.replace("O", "0")
+        farm_text = farm_text.replace("o", "0")
+        farm_text = farm_text.replace("S", "5")
+        farm_text = farm_text.replace("s", "5")
+        for l in farm_text:
+            if not l.isdigit():
+                farm_text = farm_text.replace(l, "")
+
+        farm.append(farm_text)     
+    
+    tabelaplayer["KILLS"] = kills
+    tabelaplayer["DEATHS"] = deaths
+    tabelaplayer["ASSISTS"] = assists
+    tabelaplayer["FARM"] = farm
+    tabelaplayer["CHAMPION"] = championslist
+    return tabelaplayer
+
+def run(screenshot_path, icon_folder):
+    image = open_resize(screenshot_path)
+    champion_images = get_champion_images(image)
+    hud_images = get_players_hud(image)
+    icons = load_icons(icon_folder)
+    top_matches, list = find_best_matches(icons, champion_images)
+    reader = easyocr.Reader(['en'])
+    df = get_top_bar(image, reader)
+    df2 = get_hud_info(hud_images, reader, list)
+    print(df2)
+    print(df)
+
+
 
 
 
