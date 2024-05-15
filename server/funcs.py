@@ -424,8 +424,8 @@ def run(screenshot_path, icon_folder):
     reader = easyocr.Reader(['en'])
     df = get_top_bar(image, reader)
     df2 = get_hud_info(hud_images, reader, list)
-    print(df2)
-    print(df)
+
+    return df, df2
 
 
 

@@ -27,7 +27,7 @@ const HomePage = () => {
     };
 
     const uploadImage = async () => {
-        console.log(imageUrl);
+        console.log(imageUrl);  
         if (!imageUrl) {
             alert("Please enter an image URL!");
             return;
