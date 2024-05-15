@@ -175,6 +175,23 @@ def process_assists(filename):
     data['ASSISTS'] = assists
     data.to_excel(filename, index=False)
 
+def process_champions(filename):
+    data = pd.read_excel(filename)
+
+    # roda a coluna CHAMPION e ve qual o campeao com mais ocorrencias. trocar tudo que for diferente dele, por ele
+    champions = data['CHAMPION'].tolist()
+    champion = max(set(champions), key=champions.count)
+
+    for i in range(1, len(champions)):
+        # se for diferente do campeao mais escolhido, substituir pelo campeao mais escolhido
+        if champions[i] != champion:
+            champions[i] = champion
+
+    data['CHAMPION'] = champions
+    data.to_excel(filename, index=False)
+
+    
+
 
 @app.route('/process', methods=['GET'])
 def process():
@@ -182,6 +199,8 @@ def process():
     for i in range(1, 11):
         filename = f'dados_{i}.0.xlsx'
         data = pd.read_excel(filename)
+        process_champions(filename)
+        print ('=================')
         process_kills(filename)
         print ('=================')
         process_deaths(filename)
