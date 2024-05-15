@@ -103,12 +103,79 @@ def process_kills(filename):
             print (f'-----------------')
             kills[i] = kills[i-1]
             print (f'AGORA KILLS: {kills[i]}')
-
-
     data['KILLS'] = kills
     data.to_excel(filename, index=False)
 
-  
+def process_deaths(filename):
+    data = pd.read_excel(filename)
+    deaths = data['DEATHS'].tolist()
+
+    for i in range(1, len(deaths)):
+        # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
+        # print (f'File: {filename}')
+        # print ("deaths atual", deaths[i], "deaths anterior", deaths[i-1])
+        # se for a e o anterior for 3, substituir por 4
+        # se for a e o anterior for 4, substituir por 4
+        if (deaths[i] == 'a' and deaths[i-1] == '3') or (deaths[i] == 'a' and deaths[i-1] == '4'):
+            # print (f'mudou de a para 4')
+            deaths[i] = '4'
+
+        if deaths[i] == 'S':
+            # print (f'mudou de S para 5')
+            deaths[i] = '5'
+
+        if deaths[i] == 'erro':
+            # print (f'mudou de erro pro valor antigo')
+            deaths[i] = deaths[i-1]
+
+    for i in range(1, len(deaths)):
+        # se o de agora for maior que o anterior, e menor que o proximo, substituir pelo anterior
+        if (int(deaths[i]) > int(deaths[i-1])) and (int(deaths[i]) > int(deaths[i+1])):
+            print (f'File: {filename}')
+            print (type(deaths[i]), type(deaths[i-1]))
+            print (f'Deaths: {deaths[i]} > Deaths: {deaths[i-1]} < Deaths: {deaths[i+1]}')
+            print (f'-----------------')
+            deaths[i] = deaths[i-1]
+            print (f'AGORA Deaths: {deaths[i]}')
+        # se o de agora for menor que o anterior
+        if (int(deaths[i]) < int(deaths[i-1])):
+            print (f'File: {filename}')
+            print (type(deaths[i]), type(deaths[i-1]))
+            print (f'Deaths: {deaths[i]} < Deaths: {deaths[i-1]}')
+            print (f'-----------------')
+            deaths[i] = deaths[i-1]
+            print (f'AGORA Deaths: {deaths[i]}')
+
+    data['DEATHS'] = deaths
+    data.to_excel(filename, index=False)
+
+def process_assists(filename):
+    data = pd.read_excel(filename)
+    assists = data['ASSISTS'].tolist()
+
+    for i in range(1, len(assists)):
+        # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
+        print (f'File: {filename}')
+
+        if assists[i] == 'S':
+            print (f'mudou de S para 5')
+            assists[i] = '5'
+
+        if assists[i] == 'erro':
+            print (f'mudou de erro pro valor antigo')
+            assists[i] = assists[i-1]
+
+        if int(assists[i]) < int(assists[i-1]):
+            print (f'File: {filename}')
+            print (type(assists[i]), type(assists[i-1]))
+            print (f'Assists: {assists[i]} < Assists: {assists[i-1]}')
+            print (f'-----------------')
+            assists[i] = assists[i-1]
+            print (f'AGORA Assists: {assists[i]}')
+    data['ASSISTS'] = assists
+    data.to_excel(filename, index=False)
+
+
 @app.route('/process', methods=['GET'])
 def process():
 
@@ -116,6 +183,11 @@ def process():
         filename = f'dados_{i}.0.xlsx'
         data = pd.read_excel(filename)
         process_kills(filename)
+        print ('=================')
+        process_deaths(filename)
+        print ('=================')
+        process_assists(filename)
+        print ('=================')
         # print (data)
 
     dataBlue = pd.read_excel('dados_BLUE.xlsx')
@@ -129,10 +201,6 @@ def process():
 
     process_kills('dados_BLUE.xlsx')
     process_kills('dados_RED.xlsx')
-
-    # print (dataBlue)
-    # print ('-----------------')
-    # print (dataRed)
     return jsonify({'message': 'Data extracted successfully'})
 
 @app.route('/data', methods=['GET'])
