@@ -45,11 +45,9 @@ def getDataFromFrames():
     pathicons = 'championIcons'
 
     i = 3000
-    count = 0
     csvData = []
 
-    while True or count < 5:
-        count += 1
+    while True:
         filename = f"frame_{i}.jpg"
         full_path = os.path.join(folder, filename)
         full_path = full_path.replace('\\', '/')
