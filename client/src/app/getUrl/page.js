@@ -50,6 +50,23 @@ const HomePage = () => {
         }
     };
 
+    const getData = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/data', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await response.json();
+            console.log(result);
+            alert('Data fetched successfully');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Data fetch failed');
+        }
+    }
+
     const tryCSV = async () => {
         try {
             const response = await fetch('http://localhost:8080/csv', {
@@ -86,6 +103,8 @@ const HomePage = () => {
                     <button onClick={uploadImage} className={styles.uploadButton}>GET URL</button>
                     <button onClick={tryCode} className={styles.uploadButton}>TRY THE CODE</button>
                     <button onClick={tryCSV} className={styles.uploadButton}>TRY THE CSV</button>
+                    <button onClick={getData} className={styles.uploadButton}>GET THE DATA</button>
+
 
 
                 </div>

@@ -83,7 +83,36 @@ def getDataFromFrames():
     return jsonify({'message': 'Data extracted successfully'})
     
 
+@app.route('/data', methods=['GET'])
+def data():
+# Ler o CSV
+    data = pd.read_csv('data.csv')
 
+    # Agrupar os dados com base na coluna 'TIME'
+    grupos = data.groupby('TIME')
+
+    # Salvar cada grupo em um arquivo Excel separado
+    for time, grupo in grupos:
+        nome_arquivo = f'dados_{time}.xlsx'  # Nome do arquivo baseado no tempo de jogo
+        grupo.to_excel(nome_arquivo, index=False)
+
+
+    jogadores = data['PLAYER'].unique()
+
+    for jogador in jogadores:
+        jogadorData = data[data['PLAYER'] == jogador]
+        jogadorData = jogadorData[['KILLS', 'frame', 'PLAYER', 'TEAM', 'DEATHS', 'ASSISTS', 'FARM', 'CHAMPION']]
+
+        print (jogadorData)
+        print ('-----------------')
+        print (jogador)
+
+        # Salvar os dados do jogador em um arquivo Excel com o nome do jogador
+        nome_arquivo_jogador = f'dados_{jogador}.xlsx'
+        jogadorData.to_excel(nome_arquivo_jogador, index=False)
+
+
+    return jsonify({'message': 'Data extracted successfully'})
 
 @app.route('/api', methods=['POST'])
 def api():
