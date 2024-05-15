@@ -9,6 +9,25 @@ const HomePage = () => {
         setImageUrl(event.target.value);
     };
 
+    const processData = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/process', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await response.json();
+            console.log(result);
+            alert('Data processed successfully');
+        }
+        catch (error) {
+            console.error('Error:', error);
+            alert('Data processing failed');
+        }
+    };
+    
+
     const tryCode = async () => {
         try {
             const response = await fetch('http://localhost:8080/code', {
@@ -104,6 +123,8 @@ const HomePage = () => {
                     <button onClick={tryCode} className={styles.uploadButton}>TRY THE CODE</button>
                     <button onClick={tryCSV} className={styles.uploadButton}>TRY THE CSV</button>
                     <button onClick={getData} className={styles.uploadButton}>GET THE DATA</button>
+                    <button onClick={processData} className={styles.uploadButton}>PROCESS THE DATA</button>
+
 
 
 

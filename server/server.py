@@ -81,7 +81,61 @@ def getDataFromFrames():
     csv.to_csv('data.csv', index=False)            
 
     return jsonify({'message': 'Data extracted successfully'})
-    
+
+def process_kills(filename):
+    data = pd.read_excel(filename)
+    kills = data['KILLS'].tolist()
+
+    for i in range(1, len(kills)):
+        # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
+        print (f'File: {filename}')
+
+        if kills[i] == 'S':
+            print (f'mudou de S para 5')
+            kills[i] = '5'
+
+        if kills[i] == 'erro':
+            print (f'mudou de erro pro valor antigo')
+            kills[i] = kills[i-1]
+
+        if int(kills[i]) < int(kills[i-1]):
+            print (f'File: {filename}')
+            print (type(kills[i]), type(kills[i-1]))
+            print (f'Kills: {kills[i]} < Kills: {kills[i-1]}')
+            print (f'-----------------')
+            kills[i] = kills[i-1]
+            print (f'AGORA KILLS: {kills[i]}')
+
+
+    data['KILLS'] = kills
+    data.to_excel(filename, index=False)
+
+  
+@app.route('/process', methods=['GET'])
+def process():
+
+    for i in range(1, 11):
+        filename = f'dados_{i}.0.xlsx'
+        data = pd.read_excel(filename)
+        process_kills(filename)
+        # print (data)
+
+    dataBlue = pd.read_excel('dados_BLUE.xlsx')
+    dataRed = pd.read_excel('dados_RED.xlsx')
+    # deixar somente as colunas que interessam e salvar ele de volta no arquivo
+    # TIME	GOLD	TOWERS	DRAGONS	ARAUTO	LARVA	KILLS	frame
+    dataBlue = dataBlue[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
+    dataRed = dataRed[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
+    dataBlue.to_excel('dados_BLUE.xlsx', index=False)
+    dataRed.to_excel('dados_RED.xlsx', index=False)
+
+    process_kills('dados_BLUE.xlsx')
+    process_kills('dados_RED.xlsx')
+
+    # print (dataBlue)
+    # print ('-----------------')
+    # print (dataRed)
+    return jsonify({'message': 'Data extracted successfully'})
 
 @app.route('/data', methods=['GET'])
 def data():
