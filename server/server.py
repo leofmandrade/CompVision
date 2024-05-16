@@ -84,23 +84,14 @@ def process_kills(filename):
     kills = data['KILLS'].tolist()
 
     for i in range(1, len(kills)):
-        # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
-        print (f'File: {filename}, KILLS atual: {kills[i]}, KILLS anterior: {kills[i-1]}')
-
         if kills[i] == 'S':
-            print (f'mudou de S para 5')
-            kills[i] = '5'
 
+            kills[i] = '5'
         if kills[i] == 'erro':
-            print (f'mudou de erro pro valor antigo')
             kills[i] = kills[i-1]
 
         if int(kills[i]) < int(kills[i-1]):
-            print (type(kills[i]), type(kills[i-1]))
-            print (f'Kills: {kills[i]} < Kills: {kills[i-1]}')
-            print (f'-----------------')
             kills[i] = kills[i-1]
-            print (f'AGORA KILLS: {kills[i]}')
     data['KILLS'] = kills
     data.to_excel(filename, index=False)
 
@@ -109,40 +100,21 @@ def process_deaths(filename):
     deaths = data['DEATHS'].tolist()
 
     for i in range(1, len(deaths)):
-        print (f'File: {filename}')
-        print ("deaths atual", deaths[i], "deaths anterior", deaths[i-1])
         if (deaths[i] == 'a' and deaths[i-1] == '3') or (deaths[i] == 'a' and deaths[i-1] == '4'):
-            # print (f'mudou de a para 4')
             deaths[i] = '4'
 
         if deaths[i] == 'S':
-            # print (f'mudou de S para 5')
             deaths[i] = '5'
 
         if deaths[i] == 'erro':
-            # print (f'mudou de erro pro valor antigo')
             deaths[i] = deaths[i-1]
             print ("alterou erro")
 
     for i in range(1, len(deaths)-1):
-        print ("entrou aqui")
-        print ("====================")
-        # se o de agora for maior que o anterior, e menor que o proximo, substituir pelo anterior
         if (int(deaths[i]) > int(deaths[i-1])) and (int(deaths[i]) > int(deaths[i+1])):
-            print (f'File: {filename}')
-            print (type(deaths[i]), type(deaths[i-1]))
-            print (f'Deaths: {deaths[i]} > Deaths: {deaths[i-1]} < Deaths: {deaths[i+1]}')
-            print (f'-----------------')
             deaths[i] = deaths[i-1]
-            print (f'AGORA Deaths: {deaths[i]}')
-        # se o de agora for menor que o anterior
         if (int(deaths[i]) < int(deaths[i-1])):
-            print (f'File: {filename}')
-            print (type(deaths[i]), type(deaths[i-1]))
-            print (f'Deaths: {deaths[i]} < Deaths: {deaths[i-1]}')
-            print (f'-----------------')
             deaths[i] = deaths[i-1]
-            print (f'AGORA Deaths: {deaths[i]}')
 
     data['DEATHS'] = deaths
     data.to_excel(filename, index=False)
@@ -152,24 +124,15 @@ def process_assists(filename):
     assists = data['ASSISTS'].tolist()
 
     for i in range(1, len(assists)):
-        # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
-        print (f'File: {filename}')
-
         if assists[i] == 'S':
-            print (f'mudou de S para 5')
             assists[i] = '5'
 
         if assists[i] == 'erro':
-            print (f'mudou de erro pro valor antigo')
             assists[i] = assists[i-1]
 
         if int(assists[i]) < int(assists[i-1]):
-            print (f'File: {filename}')
-            print (type(assists[i]), type(assists[i-1]))
-            print (f'Assists: {assists[i]} < Assists: {assists[i-1]}')
-            print (f'-----------------')
             assists[i] = assists[i-1]
-            print (f'AGORA Assists: {assists[i]}')
+
     data['ASSISTS'] = assists
     data.to_excel(filename, index=False)
 
@@ -178,10 +141,11 @@ def process_champions(filename):
 
     # roda a coluna CHAMPION e ve qual o campeao com mais ocorrencias. trocar tudo que for diferente dele, por ele
     champions = data['CHAMPION'].tolist()
+    print (champions)
     champion = max(set(champions), key=champions.count)
 
     for i in range(1, len(champions)):
-        # se for diferente do campeao mais escolhido, substituir pelo campeao mais escolhido
+        print (f'Campeao atual: {champions[i]}, Campeao mais comum: {champion}')
         if champions[i] != champion:
             champions[i] = champion
             print(f'Campeao trocado para {champion}')
@@ -201,6 +165,33 @@ def process_tophud(dataframe):
                 dataframe[coluna][i] = dataframe[coluna][i-1]
     return dataframe
 
+def process_farm(dataframe):
+    data = pd.read_excel(dataframe)
+    farm = data['FARM'].tolist()
+
+    # passa por cada linha e se na linha atual tiver "erro" ou se tiver um valor menor que o anterior, substituir pelo anterior
+    for i in range(1, len(farm)):
+        print (f'Farm atual: {farm[i]}, Farm anterior: {farm[i-1]}')
+        print (f'tipo: {type(farm[i])}, tipo: {type(farm[i-1])}')
+        if pd.isna(farm[i]):
+            farm[i] = farm[i-1]
+
+        if farm[i] == 'erro':
+            farm[i] = farm[i-1]
+
+        # fazer algo do tipo, se o atual for muito maior ou muito menor que o anterior, substituir pelo anterior
+        if (int(farm[i]) > int(farm[i-1]) + 100) or (int(farm[i]) < int(farm[i-1]) - 100):
+            farm[i] = farm[i-1]
+
+
+
+        if int(farm[i]) < int(farm[i-1]):
+            farm[i] = farm[i-1]
+            
+
+    data['FARM'] = farm
+    data.to_excel(dataframe, index=False)
+
 
 @app.route('/process', methods=['GET'])
 def process():
@@ -216,6 +207,8 @@ def process():
         process_deaths(filename)
         print ('=================')
         process_assists(filename)
+        print ('=================')
+        process_farm(filename)
         print ('=================')
 
         all_data = pd.concat([all_data, data], ignore_index=True)
@@ -316,7 +309,7 @@ def csv():
 FILE_NAMES = [
     'dados_1.0.xlsx', 'dados_2.0.xlsx', 'dados_3.0.xlsx', 'dados_4.0.xlsx',
     'dados_5.0.xlsx', 'dados_6.0.xlsx', 'dados_7.0.xlsx', 'dados_8.0.xlsx',
-    'dados_9.0.xlsx', 'dados_10.0.xlsx', 'dados_BLUE.xlsx', 'dados_RED.xlsx', 'dados_todosPlayers.xlsx'
+    'dados_9.0.xlsx', 'dados_10.0.xlsx', 'dados_BLUE.xlsx', 'dados_RED.xlsx', 
 ]
 
 FILES_DIRECTORY = os.getcwd()
@@ -338,6 +331,25 @@ def download_files():
         return jsonify({"error": str(e)}), 500
 
 
+
+def resultsChampionIcons():
+    # ve em cada excel: dados_1.0.xlsx, dados_2.0.xlsx, ..., dados_10.0.xlsx e retorna o champ de cada player. ex: champ1, champ2, ..., champ10
+    # retorna um json com os campeoes
+    jsonChampions = {}
+    for i in range(1, 11):
+        filename = f'dados_{i}.0.xlsx'
+        data = pd.read_excel(filename)
+        champions = data['CHAMPION'].tolist()
+        jsonChampions[f'champ{i}'] = champions[0]
+        print (f'champ{i}: {champions[0]}')
+    return jsonify(jsonChampions)
+
+
+
+@app.route('/results', methods=['GET'])
+def results():
+    # chama o resultsChampionIcons
+    return resultsChampionIcons()
 
 
 

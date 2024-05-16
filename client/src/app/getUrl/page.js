@@ -4,6 +4,7 @@ import styles from './page.module.css';
 
 const HomePage = () => {
     const [imageUrl, setImageUrl] = useState('');
+    const [showNextPage, setShowNextPage] = useState(false);
 
     const handleInputChange = (event) => {
         setImageUrl(event.target.value);
@@ -115,6 +116,7 @@ const HomePage = () => {
             document.body.appendChild(a);
             a.click();
             a.remove();
+            setShowNextPage(true);
         } catch (error) {
             console.error('Error:', error);
             alert('File download failed');
@@ -130,6 +132,7 @@ const HomePage = () => {
             await processData();
             await downloadFiles();
             alert('All tasks completed successfully');
+            setShowNextPage(true);
         } catch (error) {
             console.error('Error:', error);
             alert('One or more tasks failed');
@@ -160,6 +163,11 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
+            {showNextPage && (
+                <button onClick={() => window.location.href='/results'} className={styles.uploadButton}>
+                    Go to Results Page
+                </button>
+            )}
         </main>
     );
 };

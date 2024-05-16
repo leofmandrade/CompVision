@@ -1,0 +1,202 @@
+.main {
+  font-family: 'LoLFont', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background-image: linear-gradient(180deg, #091428 0%, #0A1428 100%);
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100vh; /* Garante que o background cubra toda a altura da tela */
+}
+
+
+.blueBorder {
+  border: 2px solid blue;
+  border-radius: 80%; /* Torna o contorno circular */
+}
+
+.redBorder {
+  border: 1px solid red;
+  border-radius: 80%; /* Torna o contorno circular */
+}
+
+.championsDisposition {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(160, 135, 190);
+  align-items: center;
+  width: 30%;
+}
+
+.championsRectangle {
+  min-width: 90%;
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  background-color: rgb(60, 22, 107);
+  padding: 1rem; /* Adiciona um espaçamento interno */
+}
+
+.championsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  background-color: rgb(107, 53, 22);
+}
+
+/* Estilo para cada campeão */
+.champion {
+  flex: 0 0 20%; /* Cada campeão ocupará 20% da largura do contêiner */
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem; /* Adiciona um espaçamento inferior */
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+
+}
+
+.championIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 80%;
+  transition: transform 0.2s ease-in-out; /* Adiciona uma transição suave */
+  overflow: hidden; /* Adiciona overflow hidden para cortar as bordas */
+  /* Efeito de zoom quando o mouse passa por cima */
+  &:hover {
+    transform: scale(1.2); /* Aumenta o tamanho em 20% */
+  }
+}
+
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 4rem;
+  color: #C89B3C;
+}
+
+.center {
+  text-align: center;
+}
+
+.customFileUpload {
+  display: inline-block;
+  padding: 2rem 2rem;
+  cursor: pointer;  
+  background-image: linear-gradient(90deg, #785A28 0%, #C89B3C 100%);
+  color: white;
+  border-radius: 1rem;
+  margin-top: 1rem;
+}
+
+/* hover .customFileUpload {
+  display: inline-block;
+  padding: 2rem 2rem;
+  cursor: pointer;
+  background-image: linear-gradient(90deg, #785A28 0%, #C89B3C 100%);
+  color: white;
+  border-radius: 1rem;
+  margin-top: 1rem;
+}
+*/
+
+
+.customFileUpload:hover {
+  background-image: linear-gradient(90deg, #C89B3C 0%, #785A28 100%);
+}
+
+.customFileUpload:active {
+  background-image: linear-gradient(90deg, #785A28 0%, #C89B3C 100%);
+}
+
+
+
+.fileInput {
+  display: none;
+}
+
+.uploadedImage {
+  width: 60%; /* ajuste conforme necessário */
+  border-radius: 2rem;
+}
+
+@font-face {
+  font-family: 'LoLFont';
+  src: url('/fonts/BeaufortForLoL-OTF/BeaufortforLOL-Bold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.uploadButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  background-image: linear-gradient(90deg, #785A28 0%, #C89B3C 100%);
+  color: white;
+  border-radius: 1rem;
+  margin: 1rem;
+  font-family: 'LoLFont', sans-serif;
+  font-size: large;
+
+}
+
+.uploadButton2 {
+  display: inline-block;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  background-image: linear-gradient(90deg, #785A28 0%, #C89B3C 100%);
+  color: white;
+  border-radius: 1rem;
+  margin: .5rem;
+  margin-top: 1rem;
+  width: 90%;
+  font-family: 'LoLFont', sans-serif;
+  font-size: larger;
+
+}
+
+.uploadButton:hover {
+ 
+  filter: brightness(120%);
+  transform: scale(1.1);
+  
+
+}
+
+.uploadButton2:hover {
+ 
+  filter: brightness(120%);
+  transform: scale(1.05);
+  
+
+}
+
+.coluna{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.urlInput{
+  width: 90%;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  font-family: 'LoLFont', sans-serif;
+}
+
+.urlInput:hover{
+  transform: scale(1.005);
+}
