@@ -99,6 +99,22 @@
 
 }
 
+.uploadButton:hover {
+ 
+  filter: brightness(120%);
+  transform: scale(1.1);
+  
+
+}
+
+.uploadButton2:hover {
+ 
+  filter: brightness(120%);
+  transform: scale(1.05);
+  
+
+}
+
 .coluna{
   display: flex;
   flex-direction: column;
@@ -119,4 +135,8 @@
   border-radius: 1rem;
   margin-top: 1rem;
   font-family: 'LoLFont', sans-serif;
+}
+
+.urlInput:hover{
+  transform: scale(1.005);
 }
