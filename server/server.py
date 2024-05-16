@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from PIL import Image
 from io import BytesIO
@@ -7,6 +7,7 @@ import pandas as pd
 import cv2
 import os
 import funcs as f
+import zipfile
 
 
 app = Flask(__name__)
@@ -56,9 +57,7 @@ def getDataFromFrames():
         if os.path.isfile(full_path):
             print (full_path, "exists")
             df, df2 = f.run(full_path, pathicons)
-            print (df)
-            print ("-----------------")
-            print (df2)
+           
 
             df['frame'] = i
             df2['frame'] = i
@@ -186,16 +185,28 @@ def process_champions(filename):
         # se for diferente do campeao mais escolhido, substituir pelo campeao mais escolhido
         if champions[i] != champion:
             champions[i] = champion
+            print(f'Campeao trocado para {champion}')
 
     data['CHAMPION'] = champions
     data.to_excel(filename, index=False)
 
-    
+
+def process_tophud(dataframe):
+    colunas = dataframe.columns
+    for coluna in colunas:
+        for i in range(1, len(dataframe[coluna])):
+            if coluna == 'GOLD':
+                if len(dataframe[coluna][i]) ==3:
+                    dataframe[coluna][i] = dataframe[coluna][i][0] + dataframe[coluna][i][1] +  "." + dataframe[coluna][i][2]
+            if dataframe[coluna][i] == 'No text detected':
+                dataframe[coluna][i] = dataframe[coluna][i-1]
+    return dataframe
 
 
 @app.route('/process', methods=['GET'])
 def process():
 
+    all_data = pd.DataFrame()
     for i in range(1, 11):
         filename = f'dados_{i}.0.xlsx'
         data = pd.read_excel(filename)
@@ -207,7 +218,13 @@ def process():
         print ('=================')
         process_assists(filename)
         print ('=================')
+
+        all_data = pd.concat([all_data, data], ignore_index=True)
         # print (data)
+
+    all_data.to_excel('dados_todosPlayers.xlsx', index=False)
+
+ 
 
     dataBlue = pd.read_excel('dados_BLUE.xlsx')
     dataRed = pd.read_excel('dados_RED.xlsx')
@@ -215,6 +232,8 @@ def process():
     # TIME	GOLD	TOWERS	DRAGONS	ARAUTO	LARVA	KILLS	frame
     dataBlue = dataBlue[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
     dataRed = dataRed[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
+    dataBlue = process_tophud(dataBlue)
+    dataRed = process_tophud(dataRed)
     dataBlue.to_excel('dados_BLUE.xlsx', index=False)
     dataRed.to_excel('dados_RED.xlsx', index=False)
 
@@ -242,6 +261,7 @@ def data():
         jogadorData = data[data['PLAYER'] == jogador]
         jogadorData = jogadorData[['KILLS', 'frame', 'PLAYER', 'TEAM', 'DEATHS', 'ASSISTS', 'FARM', 'CHAMPION']]
 
+        
         print (jogadorData)
         print ('-----------------')
         print (jogador)
@@ -249,6 +269,7 @@ def data():
         # Salvar os dados do jogador em um arquivo Excel com o nome do jogador
         nome_arquivo_jogador = f'dados_{jogador}.xlsx'
         jogadorData.to_excel(nome_arquivo_jogador, index=False)
+
 
 
     return jsonify({'message': 'Data extracted successfully'})
@@ -288,6 +309,29 @@ def csv():
     return getDataFromFrames()
 
 
+FILE_NAMES = [
+    'dados_1.0.xlsx', 'dados_2.0.xlsx', 'dados_3.0.xlsx', 'dados_4.0.xlsx',
+    'dados_5.0.xlsx', 'dados_6.0.xlsx', 'dados_7.0.xlsx', 'dados_8.0.xlsx',
+    'dados_9.0.xlsx', 'dados_10.0.xlsx', 'dados_BLUE.xlsx', 'dados_RED.xlsx', 'dados_todosPlayers.xlsx'
+]
+
+FILES_DIRECTORY = os.getcwd()
+
+@app.route('/download', methods=['GET'])
+def download_files():
+    try:
+        zip_filename = "dados_files.zip"
+        zip_filepath = os.path.join(FILES_DIRECTORY, zip_filename)
+        
+        with zipfile.ZipFile(zip_filepath, 'w') as zipf:
+            for file_name in FILE_NAMES:
+                file_path = os.path.join(FILES_DIRECTORY, file_name)
+                if os.path.exists(file_path):
+                    zipf.write(file_path, os.path.basename(file_path))
+        
+        return send_file(zip_filepath, as_attachment=True)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 

@@ -26,7 +26,6 @@ const HomePage = () => {
             alert('Data processing failed');
         }
     };
-    
 
     const tryCode = async () => {
         try {
@@ -102,15 +101,46 @@ const HomePage = () => {
             alert('CSV generation failed');
         }
     }
-    
 
+    const downloadFiles = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/download', {
+                method: 'GET',
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dados_files.zip';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('File download failed');
+        }
+    };
 
+    const runAllTasks = async () => {
+        try {
+            await uploadImage();
+            await tryCode();
+            await tryCSV();
+            await getData();
+            await processData();
+            await downloadFiles();
+            alert('All tasks completed successfully');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('One or more tasks failed');
+        }
+    };
 
     return (
         <main className={styles.main}>
             <h1 className={styles.title}>LEAGUE OF LEGENDS DATA</h1>
             <div className={styles.center}>
-                <div>
+                <div className={styles.coluna}>
                     <input 
                         id="image-url" 
                         type="text" 
@@ -119,15 +149,15 @@ const HomePage = () => {
                         value={imageUrl} 
                         onChange={handleInputChange} 
                     />
+                    <button onClick={runAllTasks} className={styles.uploadButton2}>RUN</button>
+                    <div className={styles.row} >
                     <button onClick={uploadImage} className={styles.uploadButton}>GET URL</button>
                     <button onClick={tryCode} className={styles.uploadButton}>TRY THE CODE</button>
                     <button onClick={tryCSV} className={styles.uploadButton}>TRY THE CSV</button>
                     <button onClick={getData} className={styles.uploadButton}>GET THE DATA</button>
                     <button onClick={processData} className={styles.uploadButton}>PROCESS THE DATA</button>
-
-
-
-
+                    <button onClick={downloadFiles} className={styles.uploadButton}>DOWNLOAD FILES</button>
+                    </div>
                 </div>
             </div>
         </main>
