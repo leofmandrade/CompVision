@@ -85,7 +85,7 @@ def process_kills(filename):
 
     for i in range(1, len(kills)):
         # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
-        print (f'File: {filename}')
+        print (f'File: {filename}, KILLS atual: {kills[i]}, KILLS anterior: {kills[i-1]}')
 
         if kills[i] == 'S':
             print (f'mudou de S para 5')
@@ -96,7 +96,6 @@ def process_kills(filename):
             kills[i] = kills[i-1]
 
         if int(kills[i]) < int(kills[i-1]):
-            print (f'File: {filename}')
             print (type(kills[i]), type(kills[i-1]))
             print (f'Kills: {kills[i]} < Kills: {kills[i-1]}')
             print (f'-----------------')
@@ -110,11 +109,8 @@ def process_deaths(filename):
     deaths = data['DEATHS'].tolist()
 
     for i in range(1, len(deaths)):
-        # se for menor que o anterior ou for igual a "erro", substituir pelo anterior
-        # print (f'File: {filename}')
-        # print ("deaths atual", deaths[i], "deaths anterior", deaths[i-1])
-        # se for a e o anterior for 3, substituir por 4
-        # se for a e o anterior for 4, substituir por 4
+        print (f'File: {filename}')
+        print ("deaths atual", deaths[i], "deaths anterior", deaths[i-1])
         if (deaths[i] == 'a' and deaths[i-1] == '3') or (deaths[i] == 'a' and deaths[i-1] == '4'):
             # print (f'mudou de a para 4')
             deaths[i] = '4'
@@ -126,8 +122,11 @@ def process_deaths(filename):
         if deaths[i] == 'erro':
             # print (f'mudou de erro pro valor antigo')
             deaths[i] = deaths[i-1]
+            print ("alterou erro")
 
-    for i in range(1, len(deaths)):
+    for i in range(1, len(deaths)-1):
+        print ("entrou aqui")
+        print ("====================")
         # se o de agora for maior que o anterior, e menor que o proximo, substituir pelo anterior
         if (int(deaths[i]) > int(deaths[i-1])) and (int(deaths[i]) > int(deaths[i+1])):
             print (f'File: {filename}')
@@ -295,8 +294,13 @@ def api():
 @app.route('/code', methods=['GET'])
 def code():
     # do the code of capturing frames with the video path, output folder and interval seconds
-    video_path = 'videos/video.mp4'
     output_folder = 'frames'
+    if os.path.exists(output_folder):
+        files = os.listdir(output_folder)
+        for file in files:
+            file_path = os.path.join(output_folder, file)
+            os.remove(file_path)
+    video_path = 'videos/video.mp4'
     interval_seconds = 50
     return capture_frames(video_path, output_folder, interval_seconds)
 
