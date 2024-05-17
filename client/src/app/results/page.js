@@ -7,7 +7,7 @@ import championIcons from './importChampionIcons'; // Importa os ícones dos cam
 const Results = () => {
     const [champions, setChampions] = useState([]);
 
-    const getResults = async () => {
+    const getIcons = async () => {
         try {
             const response = await fetch('http://localhost:8080/results', {
                 method: 'GET',
@@ -16,6 +16,7 @@ const Results = () => {
                 }
             });
             const result = await response.json();
+            console.log("Result: ", result);
             const championsList = [];
             for (let i = 1; i <= 10; i++) {
                 championsList.push(result[`champ${i}`]);
@@ -29,6 +30,40 @@ const Results = () => {
             alert('Data processing failed');
         }
     };
+
+    const getEachChampData = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/eachChampData', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await response.json();
+            console.log("Result: ", result);
+            alert('Data processed successfully');
+        }
+
+        catch (error) {
+            console.error('Error:', error);
+            alert('Data processing failed');
+        }
+    };
+
+    const getResults = async () => {
+        try{
+            await getIcons();
+            await getEachChampData();
+            alert('Data processed successfully');
+
+        }
+        catch (error) {
+            console.error('Error:', error);
+            alert('Data processing failed');
+        }
+    };
+
+
 
     return (
         <main className={styles.main}>

@@ -331,10 +331,23 @@ def download_files():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/eachChampData', methods=['GET'])
+def eachChampData():
+    # ve em cada excel: dados_1.0.xlsx, dados_2.0.xlsx, ..., dados_10.0.xlsx e retorna um json inteiro com todos os dados de cada champ
 
-def resultsChampionIcons():
-    # ve em cada excel: dados_1.0.xlsx, dados_2.0.xlsx, ..., dados_10.0.xlsx e retorna o champ de cada player. ex: champ1, champ2, ..., champ10
-    # retorna um json com os campeoes
+    jsonChampions = {}
+    for i in range(1, 11):
+        filename = f'dados_{i}.0.xlsx'
+        data = pd.read_excel(filename)
+        jsonChampions[f'champ{i}'] = data.to_dict(orient='records')
+        print (f'champ{i}: {data.to_dict(orient="records")}')
+    return jsonify(jsonChampions)
+
+
+
+
+@app.route('/results', methods=['GET'])
+def results():
     jsonChampions = {}
     for i in range(1, 11):
         filename = f'dados_{i}.0.xlsx'
@@ -343,13 +356,6 @@ def resultsChampionIcons():
         jsonChampions[f'champ{i}'] = champions[0]
         print (f'champ{i}: {champions[0]}')
     return jsonify(jsonChampions)
-
-
-
-@app.route('/results', methods=['GET'])
-def results():
-    # chama o resultsChampionIcons
-    return resultsChampionIcons()
 
 
 
