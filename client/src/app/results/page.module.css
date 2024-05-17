@@ -11,52 +11,57 @@
   min-height: 100vh; /* Garante que o background cubra toda a altura da tela */
 }
 
-
-.blueBorder {
-  border: 2px solid blue;
-  border-radius: 80%; /* Torna o contorno circular */
-}
-
-.redBorder {
-  border: 1px solid red;
-  border-radius: 80%; /* Torna o contorno circular */
-}
-
-.championsDisposition {
-  display: flex;
-  flex-direction: column;
-  background-color: rgb(160, 135, 190);
-  align-items: center;
-  width: 30%;
-}
-
 .championsRectangle {
   min-width: 90%;
   flex-direction: row;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  background-color: rgb(60, 22, 107);
+  /* background-color: rgb(60, 22, 107); */
   padding: 1rem; /* Adiciona um espaçamento interno */
+}
+
+.textTeam {
+  color: #C89B3C;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.blueBorder {
+  border: 2px solid rgba(0, 0, 255, 0.429);
+  border-radius: 80%; /* Torna o contorno circular */
+}
+
+
+.redBorder {
+  border: 2px solid rgba(255, 0, 0, 0.355);
+  border-radius: 80%; /* Torna o contorno circular */
+}
+
+.championsDisposition {
+  display: flex;
+  flex-direction: column;
+  /* background-color: rgb(160, 135, 190); */
+  align-items: center;
+  width: 15%;
 }
 
 .championsContainer {
   display: flex;
-  flex-wrap: wrap;
-  width: 90%;
-  background-color: rgb(107, 53, 22);
+  flex-direction: row;
+  width: 100%;
+  /* background-color: rgb(107, 53, 22); */
+  justify-content: space-between
 }
 
 /* Estilo para cada campeão */
 .champion {
-  flex: 0 0 20%; /* Cada campeão ocupará 20% da largura do contêiner */
+  align-items: center;
   display: flex;
   justify-content: center;
   margin-bottom: 1rem; /* Adiciona um espaçamento inferior */
-  margin-left: 0.1rem;
-  margin-right: 0.1rem;
-
+  cursor: pointer; /* Muda o cursor para uma mãozinha */
 }
 
 .championIcon {
@@ -70,7 +75,6 @@
     transform: scale(1.2); /* Aumenta o tamanho em 20% */
   }
 }
-
 
 .title {
   margin-bottom: 2rem;

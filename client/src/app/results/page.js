@@ -40,7 +40,7 @@ const Results = () => {
             </div>
             <div className={styles.championsRectangle}>
                 <div className={styles.championsDisposition}>
-                    <h2>Blue Team:</h2>
+                    <h2 className={styles.textTeam}>Blue Team:</h2>
                     <div className={styles.championsContainer}>
                         {champions.slice(0, 5).map((champion, index) => (
                             <div key={index} className={`${styles.champion} ${styles.blueBorder}`}>
@@ -52,7 +52,7 @@ const Results = () => {
                             </div>
                         ))}
                     </div>
-                    <h2>Red Team:</h2>
+                    <h2 className={styles.textTeam}>Red Team:</h2>
                     <div className={styles.championsContainer}>
                         {champions.slice(5).map((champion, index) => (
                             <div key={index} className={`${styles.champion} ${styles.redBorder}`}>
@@ -64,6 +64,9 @@ const Results = () => {
                             </div>
                         ))}
                     </div>
+                </div>
+                <div className={styles.graphs}>
+                    alert
                 </div>
             </div>
            
