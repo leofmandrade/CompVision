@@ -276,9 +276,12 @@ def api():
 
     try:
         video = YouTube(youtubeURL)
-        video_stream = video.streams.filter(file_extension='mp4', progressive=True).order_by('resolution').desc().first()
-        video_stream.download(output_path='videos', filename='video.mp4')    
-        return jsonify({'message': 'Video downloaded successfully'})
+        video_stream = video.streams.filter(file_extension='mp4', adaptive=True, only_video=True).order_by('resolution').desc().first()
+        if video_stream:
+            video_stream.download(output_path='videos', filename='video.mp4')    
+            return jsonify({'message': 'Video downloaded successfully'})
+        else:
+            return jsonify({'error': 'No video stream found'}), 404
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
