@@ -74,6 +74,10 @@
   &:hover {
     transform: scale(1.2); /* Aumenta o tamanho em 20% */
   }
+  /* manter o zoom quando o suario clica */
+  &:active {
+    transform: scale(1.2); /* Aumenta o tamanho em 20% */
+  }
 }
 
 .title {
@@ -203,4 +207,19 @@
 
 .urlInput:hover{
   transform: scale(1.005);
+}
+.graphs{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 65%;
+
+}
+
+
+.champname{
+  font-size: 1.5rem;
+  color: #C89B3C;
+  font-family: 'LoLFont', sans-serif;
 }
