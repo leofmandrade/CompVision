@@ -153,14 +153,14 @@ const HomePage = () => {
                         onChange={handleInputChange} 
                     />
                     <button onClick={runAllTasks} className={styles.uploadButton2}>RUN</button>
-                    <div className={styles.row} >
+                    {/* <div className={styles.row} >
                     <button onClick={uploadImage} className={styles.uploadButton}>GET URL</button>
                     <button onClick={tryCode} className={styles.uploadButton}>TRY THE CODE</button>
                     <button onClick={tryCSV} className={styles.uploadButton}>TRY THE CSV</button>
                     <button onClick={getData} className={styles.uploadButton}>GET THE DATA</button>
                     <button onClick={processData} className={styles.uploadButton}>PROCESS THE DATA</button>
                     <button onClick={downloadFiles} className={styles.uploadButton}>DOWNLOAD FILES</button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             {showNextPage && (
