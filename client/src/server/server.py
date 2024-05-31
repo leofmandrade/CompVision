@@ -52,7 +52,7 @@ def getDataFromFrames():
         filename = f"frame_{i}.jpg"
         full_path = os.path.join(folder, filename)
         full_path = full_path.replace('\\', '/')
-        print (full_path)
+        print ("ESTÁ NO TRUE: ", full_path)
 
         if os.path.isfile(full_path):
             print (full_path, "exists")
@@ -83,15 +83,15 @@ def process_kills(filename):
     data = pd.read_excel(filename)
     kills = data['KILLS'].tolist()
 
-    for i in range(1, len(kills)):
-        if kills[i] == 'S':
+    # for i in range(1, len(kills)):
+    #     if kills[i] == 'S':
 
-            kills[i] = '5'
-        if kills[i] == 'erro':
-            kills[i] = kills[i-1]
+    #         kills[i] = '5'
+    #     if kills[i] == 'erro':
+    #         kills[i] = kills[i-1]
 
-        if int(kills[i]) < int(kills[i-1]):
-            kills[i] = kills[i-1]
+    #     if int(kills[i]) < int(kills[i-1]):
+    #         kills[i] = kills[i-1]
     data['KILLS'] = kills
     data.to_excel(filename, index=False)
 
@@ -99,22 +99,22 @@ def process_deaths(filename):
     data = pd.read_excel(filename)
     deaths = data['DEATHS'].tolist()
 
-    for i in range(1, len(deaths)):
-        if (deaths[i] == 'a' and deaths[i-1] == '3') or (deaths[i] == 'a' and deaths[i-1] == '4'):
-            deaths[i] = '4'
+    # for i in range(1, len(deaths)):
+    #     if (deaths[i] == 'a' and deaths[i-1] == '3') or (deaths[i] == 'a' and deaths[i-1] == '4'):
+    #         deaths[i] = '4'
 
-        if deaths[i] == 'S':
-            deaths[i] = '5'
+    #     if deaths[i] == 'S':
+    #         deaths[i] = '5'
 
-        if deaths[i] == 'erro':
-            deaths[i] = deaths[i-1]
-            print ("alterou erro")
+    #     if deaths[i] == 'erro':
+    #         deaths[i] = deaths[i-1]
+    #         print ("alterou erro")
 
-    for i in range(1, len(deaths)-1):
-        if (int(deaths[i]) > int(deaths[i-1])) and (int(deaths[i]) > int(deaths[i+1])):
-            deaths[i] = deaths[i-1]
-        if (int(deaths[i]) < int(deaths[i-1])):
-            deaths[i] = deaths[i-1]
+    # for i in range(1, len(deaths)-1):
+    #     if (int(deaths[i]) > int(deaths[i-1])) and (int(deaths[i]) > int(deaths[i+1])):
+    #         deaths[i] = deaths[i-1]
+    #     if (int(deaths[i]) < int(deaths[i-1])):
+    #         deaths[i] = deaths[i-1]
 
     data['DEATHS'] = deaths
     data.to_excel(filename, index=False)
@@ -123,15 +123,15 @@ def process_assists(filename):
     data = pd.read_excel(filename)
     assists = data['ASSISTS'].tolist()
 
-    for i in range(1, len(assists)):
-        if assists[i] == 'S':
-            assists[i] = '5'
+    # for i in range(1, len(assists)):
+    #     if assists[i] == 'S':
+    #         assists[i] = '5'
 
-        if assists[i] == 'erro':
-            assists[i] = assists[i-1]
+    #     if assists[i] == 'erro':
+    #         assists[i] = assists[i-1]
 
-        if int(assists[i]) < int(assists[i-1]):
-            assists[i] = assists[i-1]
+    #     if int(assists[i]) < int(assists[i-1]):
+    #         assists[i] = assists[i-1]
 
     data['ASSISTS'] = assists
     data.to_excel(filename, index=False)

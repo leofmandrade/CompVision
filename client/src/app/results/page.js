@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Colors } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import championIcons from './importChampionIcons';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -17,7 +17,6 @@ const Results = () => {
     const goBack = () => {
         window.history.back();
     };
-
 
     const getIcons = async () => {
         try {
@@ -50,7 +49,7 @@ const Results = () => {
             const result = await response.json();
             const champData = getChampionData(result, selectedChampion);
             setChampionStats(champData);
-            setSelectedChampionName(champData[0].CHAMPION); // Armazena o nome do campeão
+            setSelectedChampionName(champData[0].CHAMPION);
         } catch (error) {
             console.error('Error:', error);
             alert('Data processing failed');
@@ -76,33 +75,42 @@ const Results = () => {
         }
     }, [selectedChampion]);
 
-    const chartData = {
+    const fillMissingData = (data) => {
+        for (let i = 1; i < data.length; i++) {
+            if (isNaN(data[i])) {
+                data[i] = data[i - 1];
+            }
+        }
+        return data;
+    };
+
+    const processedChampionStats = {
         labels: championStats.map(stat => stat.frame),
         datasets: [
             {
                 label: 'Kills',
-                data: championStats.map(stat => stat.KILLS),
+                data: fillMissingData(championStats.map(stat => stat.KILLS)),
                 borderColor: 'rgba(0, 192, 0, 1)',
                 backgroundColor: 'rgba(0, 192, 0, 0.2)',
                 fill: false,
             },
             {
                 label: 'Deaths',
-                data: championStats.map(stat => stat.DEATHS),
+                data: fillMissingData(championStats.map(stat => stat.DEATHS)),
                 borderColor: 'rgba(255, 10, 30, 1)',
                 backgroundColor: 'rgba(255, 10, 30, 0.2)',
                 fill: false,
             },
             {
                 label: 'Assists',
-                data: championStats.map(stat => stat.ASSISTS),
+                data: fillMissingData(championStats.map(stat => stat.ASSISTS)),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 fill: false,
             },
             {
                 label: 'Farm',
-                data: championStats.map(stat => stat.FARM),
+                data: fillMissingData(championStats.map(stat => stat.FARM)),
                 borderColor: 'rgba(255, 255, 0, 1)',
                 backgroundColor: 'rgba(255, 255, 0, 0.2)',
                 fill: false,
@@ -167,7 +175,7 @@ const Results = () => {
                 </div>
                 <div className={styles.graphs}>
                     {championStats.length > 0 && (
-                        <Line data={chartData} options={options} />
+                        <Line data={processedChampionStats} options={options} />
                     )}
                 </div>
             </div>
