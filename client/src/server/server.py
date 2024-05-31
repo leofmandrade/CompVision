@@ -52,17 +52,11 @@ def getDataFromFrames():
         filename = f"frame_{i}.jpg"
         full_path = os.path.join(folder, filename)
         full_path = full_path.replace('\\', '/')
-        print ("ESTÁ NO TRUE: ", full_path)
-
         if os.path.isfile(full_path):
             print (full_path, "exists")
             df, df2 = f.run(full_path, pathicons)
-           
-
             df['frame'] = i
             df2['frame'] = i
-
-
             csvData.append(df.to_dict(orient='records'))
             csvData.append(df2.to_dict(orient='records'))
             i += 1500
@@ -82,57 +76,18 @@ def getDataFromFrames():
 def process_kills(filename):
     data = pd.read_excel(filename)
     kills = data['KILLS'].tolist()
-
-    # for i in range(1, len(kills)):
-    #     if kills[i] == 'S':
-
-    #         kills[i] = '5'
-    #     if kills[i] == 'erro':
-    #         kills[i] = kills[i-1]
-
-    #     if int(kills[i]) < int(kills[i-1]):
-    #         kills[i] = kills[i-1]
     data['KILLS'] = kills
     data.to_excel(filename, index=False)
 
 def process_deaths(filename):
     data = pd.read_excel(filename)
     deaths = data['DEATHS'].tolist()
-
-    # for i in range(1, len(deaths)):
-    #     if (deaths[i] == 'a' and deaths[i-1] == '3') or (deaths[i] == 'a' and deaths[i-1] == '4'):
-    #         deaths[i] = '4'
-
-    #     if deaths[i] == 'S':
-    #         deaths[i] = '5'
-
-    #     if deaths[i] == 'erro':
-    #         deaths[i] = deaths[i-1]
-    #         print ("alterou erro")
-
-    # for i in range(1, len(deaths)-1):
-    #     if (int(deaths[i]) > int(deaths[i-1])) and (int(deaths[i]) > int(deaths[i+1])):
-    #         deaths[i] = deaths[i-1]
-    #     if (int(deaths[i]) < int(deaths[i-1])):
-    #         deaths[i] = deaths[i-1]
-
     data['DEATHS'] = deaths
     data.to_excel(filename, index=False)
 
 def process_assists(filename):
     data = pd.read_excel(filename)
     assists = data['ASSISTS'].tolist()
-
-    # for i in range(1, len(assists)):
-    #     if assists[i] == 'S':
-    #         assists[i] = '5'
-
-    #     if assists[i] == 'erro':
-    #         assists[i] = assists[i-1]
-
-    #     if int(assists[i]) < int(assists[i-1]):
-    #         assists[i] = assists[i-1]
-
     data['ASSISTS'] = assists
     data.to_excel(filename, index=False)
 
@@ -168,34 +123,12 @@ def process_tophud(dataframe):
 def process_farm(dataframe):
     data = pd.read_excel(dataframe)
     farm = data['FARM'].tolist()
-
-    # passa por cada linha e se na linha atual tiver "erro" ou se tiver um valor menor que o anterior, substituir pelo anterior
-    for i in range(1, len(farm)):
-        print (f'Farm atual: {farm[i]}, Farm anterior: {farm[i-1]}')
-        print (f'tipo: {type(farm[i])}, tipo: {type(farm[i-1])}')
-        if pd.isna(farm[i]):
-            farm[i] = farm[i-1]
-
-        if farm[i] == 'erro':
-            farm[i] = farm[i-1]
-
-        # fazer algo do tipo, se o atual for muito maior ou muito menor que o anterior, substituir pelo anterior
-        if (int(farm[i]) > int(farm[i-1]) + 100) or (int(farm[i]) < int(farm[i-1]) - 100):
-            farm[i] = farm[i-1]
-
-
-
-        if int(farm[i]) < int(farm[i-1]):
-            farm[i] = farm[i-1]
-            
-
     data['FARM'] = farm
     data.to_excel(dataframe, index=False)
 
 
 @app.route('/process', methods=['GET'])
 def process():
-
     all_data = pd.DataFrame()
     for i in range(1, 11):
         filename = f'dados_{i}.0.xlsx'
@@ -210,10 +143,7 @@ def process():
         print ('=================')
         process_farm(filename)
         print ('=================')
-
         all_data = pd.concat([all_data, data], ignore_index=True)
-        # print (data)
-
     all_data.to_excel('dados_todosPlayers.xlsx', index=False)
 
  
