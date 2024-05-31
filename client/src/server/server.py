@@ -126,75 +126,7 @@ def process_farm(dataframe):
     data['FARM'] = farm
     data.to_excel(dataframe, index=False)
 
-
-@app.route('/process', methods=['GET'])
-def process():
-    all_data = pd.DataFrame()
-    for i in range(1, 11):
-        filename = f'dados_{i}.0.xlsx'
-        data = pd.read_excel(filename)
-        process_champions(filename)
-        print ('=================')
-        process_kills(filename)
-        print ('=================')
-        process_deaths(filename)
-        print ('=================')
-        process_assists(filename)
-        print ('=================')
-        process_farm(filename)
-        print ('=================')
-        all_data = pd.concat([all_data, data], ignore_index=True)
-    all_data.to_excel('dados_todosPlayers.xlsx', index=False)
-
- 
-
-    dataBlue = pd.read_excel('dados_BLUE.xlsx')
-    dataRed = pd.read_excel('dados_RED.xlsx')
-    # deixar somente as colunas que interessam e salvar ele de volta no arquivo
-    # TIME	GOLD	TOWERS	DRAGONS	ARAUTO	LARVA	KILLS	frame
-    dataBlue = dataBlue[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
-    dataRed = dataRed[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
-    dataBlue = process_tophud(dataBlue)
-    dataRed = process_tophud(dataRed)
-    dataBlue.to_excel('dados_BLUE.xlsx', index=False)
-    dataRed.to_excel('dados_RED.xlsx', index=False)
-
-    process_kills('dados_BLUE.xlsx')
-    process_kills('dados_RED.xlsx')
-    return jsonify({'message': 'Data extracted successfully'})
-
-@app.route('/data', methods=['GET'])
-def data():
-# Ler o CSV
-    data = pd.read_csv('data.csv')
-
-    # Agrupar os dados com base na coluna 'TIME'
-    grupos = data.groupby('TIME')
-
-    # Salvar cada grupo em um arquivo Excel separado
-    for time, grupo in grupos:
-        nome_arquivo = f'dados_{time}.xlsx'  # Nome do arquivo baseado no tempo de jogo
-        grupo.to_excel(nome_arquivo, index=False)
-
-
-    jogadores = data['PLAYER'].unique()
-
-    for jogador in jogadores:
-        jogadorData = data[data['PLAYER'] == jogador]
-        jogadorData = jogadorData[['KILLS', 'frame', 'PLAYER', 'TEAM', 'DEATHS', 'ASSISTS', 'FARM', 'CHAMPION']]
-
-        
-        print (jogadorData)
-        print ('-----------------')
-        print (jogador)
-
-        # Salvar os dados do jogador em um arquivo Excel com o nome do jogador
-        nome_arquivo_jogador = f'dados_{jogador}.xlsx'
-        jogadorData.to_excel(nome_arquivo_jogador, index=False)
-
-
-
-    return jsonify({'message': 'Data extracted successfully'})
+    
 
 @app.route('/api', methods=['POST'])
 def api():
@@ -217,27 +149,6 @@ def api():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/code', methods=['GET'])
-def code():
-    # do the code of capturing frames with the video path, output folder and interval seconds
-    output_folder = 'frames'
-    if os.path.exists(output_folder):
-        files = os.listdir(output_folder)
-        for file in files:
-            file_path = os.path.join(output_folder, file)
-            os.remove(file_path)
-    video_path = 'videos/video.mp4'
-    interval_seconds = 50
-    return capture_frames(video_path, output_folder, interval_seconds)
-
-
-
-@app.route('/csv', methods=['GET'])
-def csv():
-    # do the function getDataFromFrames() to get the data from the frames
-    print ('Getting data from frames')
-    return getDataFromFrames()
-
 
 FILE_NAMES = [
     'dados_1.0.xlsx', 'dados_2.0.xlsx', 'dados_3.0.xlsx', 'dados_4.0.xlsx',
@@ -249,6 +160,71 @@ FILES_DIRECTORY = os.getcwd()
 
 @app.route('/download', methods=['GET'])
 def download_files():
+    
+    # /code
+    output_folder = 'frames'
+    if os.path.exists(output_folder):
+        files = os.listdir(output_folder)
+        for file in files:
+            file_path = os.path.join(output_folder, file)
+            os.remove(file_path)
+    video_path = 'videos/video.mp4'
+    interval_seconds = 50
+    capture_frames(video_path, output_folder, interval_seconds)
+
+
+    # /csv
+    getDataFromFrames()
+
+
+    # /data
+    data = pd.read_csv('data.csv')
+    grupos = data.groupby('TIME')
+    # Salvar cada grupo em um arquivo Excel separado
+    for time, grupo in grupos:
+        nome_arquivo = f'dados_{time}.xlsx'  # Nome do arquivo baseado no tempo de jogo
+        grupo.to_excel(nome_arquivo, index=False)
+    jogadores = data['PLAYER'].unique()
+    for jogador in jogadores:
+        jogadorData = data[data['PLAYER'] == jogador]
+        jogadorData = jogadorData[['KILLS', 'frame', 'PLAYER', 'TEAM', 'DEATHS', 'ASSISTS', 'FARM', 'CHAMPION']]
+        print (jogadorData)
+        print ('-----------------')
+        print (jogador)
+        nome_arquivo_jogador = f'dados_{jogador}.xlsx'
+        jogadorData.to_excel(nome_arquivo_jogador, index=False)
+
+
+
+    # /process
+    all_data = pd.DataFrame()
+    for i in range(1, 11):
+        filename = f'dados_{i}.0.xlsx'
+        data = pd.read_excel(filename)
+        process_champions(filename)
+        print ('=================')
+        process_kills(filename)
+        print ('=================')
+        process_deaths(filename)
+        print ('=================')
+        process_assists(filename)
+        print ('=================')
+        process_farm(filename)
+        print ('=================')
+        all_data = pd.concat([all_data, data], ignore_index=True)
+    all_data.to_excel('dados_todosPlayers.xlsx', index=False)
+    dataBlue = pd.read_excel('dados_BLUE.xlsx')
+    dataRed = pd.read_excel('dados_RED.xlsx')
+    dataBlue = dataBlue[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
+    dataRed = dataRed[['TIME', 'GOLD', 'TOWERS', 'DRAGONS', 'ARAUTO', 'LARVA', 'KILLS', 'frame']]
+    dataBlue = process_tophud(dataBlue)
+    dataRed = process_tophud(dataRed)
+    dataBlue.to_excel('dados_BLUE.xlsx', index=False)
+    dataRed.to_excel('dados_RED.xlsx', index=False)
+    process_kills('dados_BLUE.xlsx')
+    process_kills('dados_RED.xlsx')
+
+
     try:
         zip_filename = "dados_files.zip"
         zip_filepath = os.path.join(FILES_DIRECTORY, zip_filename)
@@ -266,8 +242,6 @@ def download_files():
 
 @app.route('/eachChampData', methods=['GET'])
 def eachChampData():
-    # ve em cada excel: dados_1.0.xlsx, dados_2.0.xlsx, ..., dados_10.0.xlsx e retorna um json inteiro com todos os dados de cada champ
-
     jsonChampions = {}
     for i in range(1, 11):
         filename = f'dados_{i}.0.xlsx'
@@ -275,8 +249,6 @@ def eachChampData():
         jsonChampions[f'champ{i}'] = data.to_dict(orient='records')
         print (f'champ{i}: {data.to_dict(orient="records")}')
     return jsonify(jsonChampions)
-
-
 
 
 @app.route('/results', methods=['GET'])

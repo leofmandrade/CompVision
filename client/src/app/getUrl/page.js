@@ -10,40 +10,6 @@ const HomePage = () => {
         setImageUrl(event.target.value);
     };
 
-    const processData = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/process', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const result = await response.json();
-            console.log(result);
-            alert('Data processed successfully');
-        }
-        catch (error) {
-            console.error('Error:', error);
-            alert('Data processing failed');
-        }
-    };
-
-    const tryCode = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/code', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const result = await response.json();
-            console.log(result);
-            alert('Code executed successfully');
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Code execution failed');
-        }
-    };
 
     const uploadImage = async () => {
         console.log(imageUrl);  
@@ -69,39 +35,8 @@ const HomePage = () => {
         }
     };
 
-    const getData = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/data', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const result = await response.json();
-            console.log(result);
-            alert('Data fetched successfully');
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Data fetch failed');
-        }
-    }
 
-    const tryCSV = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/csv', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const result = await response.json();
-            console.log(result);
-            alert('CSV generated successfully');
-        } catch (error) {
-            console.error('Error:', error);
-            alert('CSV generation failed');
-        }
-    }
+
 
     const downloadFiles = async () => {
         try {
@@ -126,10 +61,6 @@ const HomePage = () => {
     const runAllTasks = async () => {
         try {
             await uploadImage();
-            await tryCode();
-            await tryCSV();
-            await getData();
-            await processData();
             await downloadFiles();
             alert('All tasks completed successfully');
             setShowNextPage(true);
