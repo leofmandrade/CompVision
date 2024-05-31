@@ -40,73 +40,35 @@ def capture_frames(video_path, output_folder, interval_seconds):
 
 
 
-def getDataFromFrames():
-    print ('pegadno dados dos frames')
-    folder = 'frames'
-    pathicons = 'championIcons'
 
-    i = 3000
-    csvData = []
-
-    while True:
-        filename = f"frame_{i}.jpg"
-        full_path = os.path.join(folder, filename)
-        full_path = full_path.replace('\\', '/')
-        if os.path.isfile(full_path):
-            print (full_path, "exists")
-            df, df2 = f.run(full_path, pathicons)
-            df['frame'] = i
-            df2['frame'] = i
-            csvData.append(df.to_dict(orient='records'))
-            csvData.append(df2.to_dict(orient='records'))
-            i += 1500
-            print (i)
-
-        else:
-            print (full_path, "does not exist")
-            break
-    
-    print (csvData)
-    concatData = [item for sublist in csvData for item in sublist]
-    csv = pd.DataFrame(concatData)
-    csv.to_csv('data.csv', index=False)            
-
-    return jsonify({'message': 'Data extracted successfully'})
-
-def process_kills(filename):
+def process(filename):
     data = pd.read_excel(filename)
     kills = data['KILLS'].tolist()
     data['KILLS'] = kills
     data.to_excel(filename, index=False)
 
-def process_deaths(filename):
-    data = pd.read_excel(filename)
     deaths = data['DEATHS'].tolist()
     data['DEATHS'] = deaths
     data.to_excel(filename, index=False)
 
-def process_assists(filename):
-    data = pd.read_excel(filename)
     assists = data['ASSISTS'].tolist()
     data['ASSISTS'] = assists
     data.to_excel(filename, index=False)
 
-def process_champions(filename):
-    data = pd.read_excel(filename)
-
-    # roda a coluna CHAMPION e ve qual o campeao com mais ocorrencias. trocar tudo que for diferente dele, por ele
     champions = data['CHAMPION'].tolist()
-    print (champions)
     champion = max(set(champions), key=champions.count)
 
     for i in range(1, len(champions)):
-        print (f'Campeao atual: {champions[i]}, Campeao mais comum: {champion}')
         if champions[i] != champion:
             champions[i] = champion
-            print(f'Campeao trocado para {champion}')
 
     data['CHAMPION'] = champions
     data.to_excel(filename, index=False)
+
+    farm = data['FARM'].tolist()
+    data['FARM'] = farm
+    data.to_excel(filename, index=False)
+
 
 
 def process_tophud(dataframe):
@@ -119,12 +81,6 @@ def process_tophud(dataframe):
             if dataframe[coluna][i] == 'No text detected':
                 dataframe[coluna][i] = dataframe[coluna][i-1]
     return dataframe
-
-def process_farm(dataframe):
-    data = pd.read_excel(dataframe)
-    farm = data['FARM'].tolist()
-    data['FARM'] = farm
-    data.to_excel(dataframe, index=False)
 
     
 
@@ -174,7 +130,34 @@ def download_files():
 
 
     # /csv
-    getDataFromFrames()
+    folder = 'frames'
+    pathicons = 'championIcons'
+
+    i = 3000
+    csvData = []
+
+    while True:
+        filename = f"frame_{i}.jpg"
+        full_path = os.path.join(folder, filename)
+        full_path = full_path.replace('\\', '/')
+        if os.path.isfile(full_path):
+            print (full_path, "exists")
+            df, df2 = f.run(full_path, pathicons)
+            df['frame'] = i
+            df2['frame'] = i
+            csvData.append(df.to_dict(orient='records'))
+            csvData.append(df2.to_dict(orient='records'))
+            i += 1500
+            print (i)
+
+        else:
+            print (full_path, "does not exist")
+            break
+    
+    print (csvData)
+    concatData = [item for sublist in csvData for item in sublist]
+    csv = pd.DataFrame(concatData)
+    csv.to_csv('data.csv', index=False)            
 
 
     # /data
@@ -201,16 +184,7 @@ def download_files():
     for i in range(1, 11):
         filename = f'dados_{i}.0.xlsx'
         data = pd.read_excel(filename)
-        process_champions(filename)
-        print ('=================')
-        process_kills(filename)
-        print ('=================')
-        process_deaths(filename)
-        print ('=================')
-        process_assists(filename)
-        print ('=================')
-        process_farm(filename)
-        print ('=================')
+        process(filename)
         all_data = pd.concat([all_data, data], ignore_index=True)
     all_data.to_excel('dados_todosPlayers.xlsx', index=False)
     dataBlue = pd.read_excel('dados_BLUE.xlsx')
@@ -221,8 +195,6 @@ def download_files():
     dataRed = process_tophud(dataRed)
     dataBlue.to_excel('dados_BLUE.xlsx', index=False)
     dataRed.to_excel('dados_RED.xlsx', index=False)
-    process_kills('dados_BLUE.xlsx')
-    process_kills('dados_RED.xlsx')
 
 
     try:
