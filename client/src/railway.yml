@@ -1,0 +1,31 @@
+# railway.yml
+
+# Nome do seu aplicativo
+name: lol-data
+
+# Versão do Docker que você está usando
+services:
+  # Serviço Flask
+  flask:
+    # O plugin para usar para esse serviço (Python)
+    plugin: python
+    # Comando para iniciar o servidor Flask
+    start: python3 -m api.server
+    # Porta em que o Flask será executado
+    port: 5328
+    # Especificar as dependências do Python
+    env:
+      PYTHON_VERSION: "3.8"
+      REQUIREMENTS_PATH: "./api/requirements.txt"
+      
+  # Serviço Next.js
+  nextjs:
+    # O plugin para usar para esse serviço (Next.js)
+    plugin: next
+    # Comando para iniciar o servidor Next.js
+    start: npm start
+    # Porta em que o Next.js será executado
+    port: 3000
+    # Especificar as dependências do Node.js
+    env:
+      NODE_VERSION: "16"
