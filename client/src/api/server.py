@@ -144,9 +144,11 @@ def download_files():
         full_path = full_path.replace('\\', '/')
         if os.path.isfile(full_path):
             print (full_path, "exists")
-            df = f.run(full_path, pathicons)
+            df, df2 = f.run(full_path, pathicons)
             df['frame'] = i
+            df2['frame'] = i
             csvData.append(df.to_dict(orient='records'))
+            csvData.append(df2.to_dict(orient='records'))
             i += 1500
             print (i)
 
