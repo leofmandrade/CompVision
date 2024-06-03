@@ -222,112 +222,6 @@ def extract_text(image,reader):
     return text
 
 
-def get_top_bar(image,reader):
-    xGold1, yGold1 = 749, 7
-    widthGold, heightGold = 35, 22
-    gold_roi1 = image[yGold1:yGold1+heightGold, xGold1:xGold1+widthGold]
-    gold_roi1 = image_processing(gold_roi1)
-    gold1 = extract_text(gold_roi1,reader)
-    gold1 = limpaerrosgold(gold1)
-    gold1 = apaganaonumero(gold1)
-    gold1.replace('_','')
-    
-
-    
-    #get gold_roi2
-    xGold2, yGold2 = 543, 8
-    gold_roi2 = image[yGold2:yGold2+heightGold, xGold2:xGold2+widthGold]
-    gold_roi2 = image_processing(gold_roi2)
-    gold2 = extract_text(gold_roi2,reader)
-    gold2 = limpaerrosgold(gold2)
-    gold2 = apaganaonumero(gold2)
-
-    #get towers1
-    xTowers1, yTowers1 = 797, 9
-    widthTowers, heightTowers = 23, 19
-    towers1 = image[yTowers1:yTowers1+heightTowers, xTowers1:xTowers1+widthTowers]
-    towers1 = image_processing(towers1)
-    towers1 = extract_text(towers1,reader)
-    towers1 = apaganaonumero(towers1)
-
-    #get towers2
-    xTowers2, yTowers2 = 499, 9
-    towers2 = image[yTowers2:yTowers2+heightTowers, xTowers2:xTowers2+widthTowers]
-    towers2 = image_processing(towers2)
-    towers2 = extract_text(towers2,reader)
-    towers2 = apaganaonumero(towers2)
-
-    #get dragons 1
-    xDragons1, yDragons1 = 951, 0
-    widthDragons, heightDragons = 25, 30
-    dragons1 = image[yDragons1:yDragons1+heightDragons, xDragons1:xDragons1+widthDragons]
-    dragons1 = image_processing(dragons1)
-    dragons1 = extract_text(dragons1,reader)
-    dragons1 = apaganaonumero(dragons1)
-
-    #get dragons 2
-    xDragons2, yDragons2 = 350, 0
-    dragons2 = image[yDragons2:yDragons2+heightDragons, xDragons2:xDragons2+widthDragons]
-    dragons2 = image_processing(dragons2)
-    dragons2 = extract_text(dragons2,reader)
-    dragons2 = apaganaonumero(dragons2)
-
-    #get arauto 1
-    xArauto1, yArauto1 = 899, 3
-    widthArauto, heightArauto = 28, 25
-    Arauto1 = image[yArauto1:yArauto1+heightArauto, xArauto1:xArauto1+widthArauto]
-    Arauto1 = image_processing(Arauto1)
-    arauto1 = extract_text(Arauto1,reader)
-    arauto1 = apaganaonumero(arauto1)
-
-    #get arauto 2
-    xArauto2, yArauto2 = 401, 3
-    Arauto2 = image[yArauto2:yArauto2+heightArauto, xArauto2:xArauto2+widthArauto]
-    Arauto2 = image_processing(Arauto2)
-    arauto2 = extract_text(Arauto2,reader)
-    arauto2 = apaganaonumero(arauto2)
-
-    #get larva1
-    xLarva1, yLarva1 = 845, 9
-    widthLarva, heightLarva = 15, 19
-    larva1 = image[yLarva1:yLarva1+heightLarva, xLarva1:xLarva1+widthLarva]
-    larva1 = image_processing(larva1)
-    larva1 = extract_text(larva1,reader)
-    larva1 = apaganaonumero(larva1)
-
-    #get larva2
-    xLarva2, yLarva2 = 449, 9
-    larva2 = image[yLarva2:yLarva2+heightLarva, xLarva2:xLarva2+widthLarva]
-    larva2 = image_processing(larva2)
-    larva2 = extract_text(larva2,reader)
-    larva2 = apaganaonumero(larva2)
-
-    #get kills1
-    xKills1, yKills1 = 667, 10
-    widthKills, heightKills = 42, 27
-    kills1 = image[yKills1:yKills1+heightKills, xKills1:xKills1+widthKills]
-    kills1 = image_processing(kills1)
-    kills1 = extract_text(kills1,reader)    
-    kills1 = limpaerrosgold(apaganaonumero(kills1))
-
-    #get kills2
-    xKills2, yKills2 = 607, 10
-    widthKills2, heightKills2 = 39, 30
-    kills2 = image[yKills2:yKills2+heightKills2, xKills2:xKills2+widthKills2]
-    kills2 = image_processing(kills2)
-    kills2 = extract_text(kills2,reader)
-    kills2 = limpaerrosgold(apaganaonumero(kills2))
-
-    tabela = pd.DataFrame()
-    tabela["TIME"] = ["RED", "BLUE"]
-    tabela["GOLD"] = [gold1, gold2]
-    tabela["TOWERS"] = [towers1, towers2]
-    tabela["DRAGONS"] = [dragons1, dragons2]
-    tabela["ARAUTO"] = [arauto1, arauto2]
-    tabela["LARVA"] = [larva1, larva2]
-    tabela["KILLS"] = [kills1, kills2]
-
-    return tabela
 
 
 def get_hud_info(hudimages,reader, championslist):
@@ -422,10 +316,9 @@ def run(screenshot_path, icon_folder):
     icons = load_icons(icon_folder)
     top_matches, list = find_best_matches(icons, champion_images)
     reader = easyocr.Reader(['en'])
-    df = get_top_bar(image, reader)
     df2 = get_hud_info(hud_images, reader, list)
 
-    return df, df2
+    return df2
 
 
 
