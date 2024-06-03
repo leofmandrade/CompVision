@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import getUrl from "./getUrl/page.js";
+import getUrl from "./geturl/page.js";
 
 // PAGINA PRINCIPAL SEMPRE DIRECIONA PARA A PAGINA DE GETURL
 export default function HomePage() {
