@@ -8,7 +8,7 @@ const importAll = (r) => {
   };
   
   // Importa todos os arquivos da pasta championIcons
-  const championIcons = importAll(require.context('../championIcons', false, /\.(png|jpe?g|svg)$/));
+  const championIcons = importAll(require.context('../../championIcons', false, /\.(png|jpe?g|svg)$/));
   
   export default championIcons;
   

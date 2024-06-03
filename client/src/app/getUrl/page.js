@@ -19,7 +19,8 @@ const HomePage = () => {
         }
 
         try {
-            const response = await fetch('https://compvision-production.up.railway.app/api', {
+            // /api/python
+            const response = await fetch('http://127.0.0.1:5328/api', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ const HomePage = () => {
 
     const downloadFiles = async () => {
         try {
-            const response = await fetch('https://compvision-production.up.railway.app/download', {
+            const response = await fetch('http://127.0.0.1:5328/download', {
                 method: 'GET',
             });
             const blob = await response.blob();
