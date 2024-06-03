@@ -20,7 +20,7 @@ const Results = () => {
 
     const getIcons = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:7609/results', {
+            const response = await fetch('https://compvision-production.up.railway.app/results', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const Results = () => {
 
     const getEachChampData = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:7609/eachChampData', {
+            const response = await fetch('https://compvision-production.up.railway.app/eachChampData', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
