@@ -8,3 +8,4 @@ pytube==15.0.0
 pillow==10.3.0
 matplotlib==3.8.4
 scipy==1.13.0
+gunicorn==22.0.0

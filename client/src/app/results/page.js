@@ -20,7 +20,7 @@ const Results = () => {
 
     const getIcons = async () => {
         try {
-            const response = await fetch('http://localhost:8080/results', {
+            const response = await fetch('https://compvision.onrender.com/results', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const Results = () => {
 
     const getEachChampData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/eachChampData', {
+            const response = await fetch('https://compvision.onrender.com/eachChampData', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
