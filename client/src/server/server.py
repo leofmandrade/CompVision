@@ -116,6 +116,7 @@ FILES_DIRECTORY = os.getcwd()
 
 @app.route('/download', methods=['GET'])
 def download_files():
+    print ('download')
     
     # /code
     output_folder = 'frames'
@@ -127,6 +128,7 @@ def download_files():
     video_path = 'videos/video.mp4'
     interval_seconds = 50
     capture_frames(video_path, output_folder, interval_seconds)
+    print ('frames captured')
 
 
     # /csv
