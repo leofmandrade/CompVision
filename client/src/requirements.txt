@@ -1,7 +1,6 @@
 flask==3.0.3
 flask-cors==4.0.1
 easyocr==1.7.1
-opencv-python==4.9.0.80
 opencv-python-headless==4.9.0.80
 pandas==2.2.1
 pytube==15.0.0
