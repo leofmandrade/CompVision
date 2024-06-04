@@ -4,9 +4,8 @@ FROM node:18-buster as build
 # Defina o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copie os arquivos de configuração do npm e pnpm
+# Copie os arquivos de configuração do npm 
 COPY package.json ./
-COPY pnpm-lock.yaml ./
 
 # Instale as dependências do npm e pnpm
 RUN npm install -g pnpm concurrently
