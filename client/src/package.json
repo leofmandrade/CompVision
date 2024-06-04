@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/server run -p 5328",
+    "flask-dev": "set FLASK_DEBUG=1 && pip3 install -r requirements.txt && python3 -m flask --app api/server run -p 5328",
     "next-dev": "next dev",
-    "dev": "npm run next-dev & npm run flask-dev",
+    "dev": "concurrently \"pnpm run next-dev\" \"pnpm run flask-dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -16,6 +16,8 @@
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "concurrently": "^8.2.0",
+    "pnpm": "^6.16.1"
   }
 }
