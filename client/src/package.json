@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flask-dev": "cross-env FLASK_DEBUG=1 pip install -r requirements.txt && python3 -m flask --app api/server run -p 5328",
+    "flask-dev": "set FLASK_DEBUG=1 pip install -r requirements.txt && python3 -m flask --app api/server run -p 5328",
     "next-dev": "next dev",
     "dev": "concurrently \"npm run flask-dev\" \"npm run next-dev\"",
     "build": "next build",
@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "concurrently": "^7.5.0",
-    "cross-env": "^7.0.3",
     "pnpm": "^8.6.0"
   }
 }
