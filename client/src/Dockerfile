@@ -17,8 +17,5 @@ COPY . .
 # Instale as dependências do Python e libGL
 RUN apt-get update && apt-get install -y python3-pip libgl1
 
-# Instale as dependências Python
-RUN pip3 install -r requirements.txt
-
 # Execute o comando de inicialização
 CMD ["npm", "run", "start"]
